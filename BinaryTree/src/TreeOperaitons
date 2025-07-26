@@ -1,0 +1,67 @@
+class Node {
+    int data;
+    Node left,right;
+    Node(int value){
+        data = value;
+        left = right = null;
+    }
+}
+ class HeightTree{
+    static int height(Node root){
+        if(root == null){
+            return 0;
+        }
+        int lheight = height(root.left);
+        int rheight = height(root.right);
+        return Math.max(lheight,rheight)+1;
+    }
+
+    static int diameterTree(Node root){
+        if (root == null){
+            return 0;
+        }
+        int lheight = height(root.left);
+        int rheight = height(root.right);
+        int ldiameter = diameterTree(root.left);
+        int rdiameter = diameterTree(root.right);
+        return Math.max(lheight+rheight,Math.max(ldiameter,rdiameter));
+    }
+    static boolean isBalanceTree(Node root){
+        if(root == null){
+            return true;
+        }
+        int lheight = height(root.left);
+        int rheight = height(root.right);
+        if(Math.abs(lheight-rheight)>1){
+            return false;
+        }
+        return isBalanceTree(root.left)&&isBalanceTree(root.right);
+    }
+
+    static int sumOfParent(Node root){
+        if(root == null || root.left == null || root.right == null){
+            return 1;
+        }
+        int sum = 0;
+        if(root.left != null){
+             sum = sum+root.left.data;
+        }
+        if(root.right != null){
+             sum = sum+root.right.data;
+        }
+        return ((root.data == sum) && (sumOfParent(root.left)== 1) &&(sumOfParent(root.right)==1))? 1:0;
+    }
+    public static void main(String [] args){
+       Node root = new Node(35);
+        root.left = new Node(20);
+        root.right = new Node(15);
+        root.left.left = new Node(15);
+        root.left.right = new Node(5);
+        root.right.left = new Node(10);
+        root.right.right = new Node(5);
+        System.out.println("height of the tree -->"+height(root));
+        System.out.println("Diameter of the tree -->"+diameterTree(root));
+        System.out.println(isBalanceTree(root)?"True":"False");
+        System.out.println(sumOfParent(root));
+    }
+}
